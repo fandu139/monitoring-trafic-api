@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  # Run local DB
+  service_web_mitra_paylsa:
+    image: transactionsvc:1.0.0
+    ports:
+      - '8080:3000'
+    restart: unless-stopped
+    environment:
+      - MIDTRANS_SERVER_KEY=
+      - MIDTRANS_CLIENT_KEY=
+      - EMAIL_CLIENT=
+      - CREDENTIALS_CLIENT=
+      - ROLE_CLIENT=
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitoring
+
+  kong:
+    image: kong
+    environment:
+      - KONG_DATABASE=off
+      - KONG_DECLARATIVE_CONFIG=/etc/kong/kong.yml
+    volumes:
+      - ./kong.yml:/etc/kong/kong.yml
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8443:8443"
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
