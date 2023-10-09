@@ -1,0 +1,13 @@
+format_version: "2.1"
+
+services:
+  - name: service_web_mitra_paylsa
+    url: http://service_web_mitra_paylsa:8080
+
+routes:
+  - name: express-route
+    paths:
+      - /
+
+plugins:
+  - name: prometheus

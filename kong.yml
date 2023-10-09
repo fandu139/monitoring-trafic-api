@@ -1,13 +1,13 @@
 format_version: "2.1"
 
 services:
-  - name: service_web_mitra_paylsa
-    url: http://service_web_mitra_paylsa:8080
-
+  - name: my-api-server
+    url: http://service_web_mitra_paylsa:3001
 routes:
-  - name: express-route
+  - name: api-request
+    service: my-api-server
     paths:
-      - /express
-
+      - /api
 plugins:
   - name: prometheus
+â
