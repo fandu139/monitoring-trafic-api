@@ -9,16 +9,22 @@ services:
     restart: unless-stopped
 
   service_web_mitra_paylsa:
-    image: fandu139/transaction-svc-paylsa:1.0.2
+    image: fandu139/transaction-svc-paylsa:1.1.0
     # ports:
       # - '3001:3000'
     restart: unless-stopped
     environment:
-      - MIDTRANS_SERVER_KEY=SB-Mid-server-B4FtSi59HABjLKrJ1ZcVQWII
-      - MIDTRANS_CLIENT_KEY=SB-Mid-client-ezeO00KzWvGTFs2H
+      - MIDTRANS_IS_PRODUCTION=true
+      - MIDTRANS_SERVER_KEY=Mid-server-H-r_eWjmw2sYohmc6B4JhHqb
+      - MIDTRANS_CLIENT_KEY=Mid-client-ctnfcJxDPlbJpQtE
       - EMAIL_CLIENT=fandupratamasvc@gmail.com
       - CREDENTIALS_CLIENT=123456
       - ROLE_CLIENT=Service
+      # - MIDTRANS_SERVER_KEY=SB-Mid-server-B4FtSi59HABjLKrJ1ZcVQWII
+      # - MIDTRANS_CLIENT_KEY=SB-Mid-client-ezeO00KzWvGTFs2H
+      # - EMAIL_CLIENT=fandupratamasvc@gmail.com
+      # - CREDENTIALS_CLIENT=123456
+      # - ROLE_CLIENT=Service
       - PORT=3001
 
   prometheus:
@@ -105,6 +111,17 @@ services:
     container_name: konga
     environment:
       - NODE_ENV=production
+
+  webserver:
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./configNginxWebMitra:/etc/nginx/conf.d
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - kong
 
 networks:
   default:
